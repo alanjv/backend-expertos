@@ -14,6 +14,7 @@ var usuario = new esquema({
     password: { type: String, required: [true, 'La contrasña es necesaria'] },
     img: { type: String, required: false },
     role: { type: String, required: true, default: 'INVITED_ROLE', enum: rolesValidos },
+    google: { type: Boolean, default: false }
 });
 
 usuario.plugin(uniqueValidator, { message: '{PATH} debe de ser unico' });
