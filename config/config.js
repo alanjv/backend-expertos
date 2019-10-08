@@ -1,0 +1,1 @@
+module.exports.SEED = 'quickly-token';
