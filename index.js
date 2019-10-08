@@ -1,10 +1,10 @@
-var expres = require('express');
+var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 
 
 //Inicializar variables
-var app = expres();
+var app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -17,12 +17,26 @@ mongoose.connection.openUri('mongodb://localhost:27017/quickly', (err, res) => {
 
 //Importar Rutas
 var appRoutes = require('./routes/rutas');
-var loginRoutes = require('./routes/login');
-var usuarioRoutes = require('./routes/usuario');
+var loginRoutes = require('./routes/loginRoutes');
+var usuarioRoutes = require('./routes/usuarioRoutes');
+var categoriasRoutes = require('./routes/categoriaRoutes');
+var postRoutes = require('./routes/postRoutes');
+var busquedaRoutes = require('./routes/busquedaRoutes');
+var uploadRoutes = require('./routes/uploadRoutes');
+var imagenesRoutes = require('./routes/imagenesRoutes');
+//server index config
+var serveIndex = require('serve-index');
+//app.use(express.static(__dirname + '/'))
+//app.use('/upload', serveIndex(__dirname + '/upload'));
 
 // Rutas
 app.use('/usuario', usuarioRoutes);
 app.use('/login', loginRoutes);
+app.use('/categorias', categoriasRoutes);
+app.use('/posts', postRoutes);
+app.use('/busqueda', busquedaRoutes);
+app.use('/upload', uploadRoutes);
+app.use('/img', imagenesRoutes);
 app.use('/', appRoutes);
 
 //Puerto
