@@ -59,7 +59,7 @@ app.post('/google', async(req, res) => {
             });
         }
 
-        if (!usuarioDb) {
+        if (usuario) {
             if (usuario.google === false) {
                 return res.status(400).json({
                     ok: false,
@@ -67,12 +67,12 @@ app.post('/google', async(req, res) => {
 
                 });
             } else {
-                var token = jwt.sign({ usuario: usuarioDb }, SEED, { expiresIn: 14400 });
+                var token = jwt.sign({ usuario: usuario }, SEED, { expiresIn: 14400 });
                 res.status(200).json({
                     ok: true,
-                    usuario: usuarioDb,
+                    usuario: usuario,
                     token: token,
-                    id: usuarioDb._id
+                    id: usuario._id
                 });
             }
         } else {
@@ -85,7 +85,14 @@ app.post('/google', async(req, res) => {
             usuario.password = 'F';
 
             usuario.save((err, usuarioDb) => {
-                var token = jwt.sign({ usuario: usuarioDb }, SEED, { expiresIn: 14400 });
+                if (err) {
+                    return res.status(500).json({
+                        ok: true,
+                        mensaje: 'Error al crear usuario - google',
+                        errors: err
+                    });
+                }
+                var token = jwt.sign({ usuario: usuario }, SEED, { expiresIn: 14400 });
                 res.status(200).json({
                     ok: true,
                     usuario: usuarioDb,
@@ -96,12 +103,6 @@ app.post('/google', async(req, res) => {
         }
     });
 
-
-    return res.status(200).json({
-        ok: true,
-        mensaje: 'Peticion realizada correctamente',
-        googleUser: googleUser
-    })
 
 });
 
