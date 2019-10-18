@@ -17,11 +17,11 @@ app.get('/coleccion/:tabla/:busqueda', (req, res) => {
         case 'usuario':
             promesa = buscarUsuario(busqueda, regex);
             break;
-        case 'post':
+        case 'posts':
             promesa = buscarPost(busqueda, regex);
             break;
 
-        case 'categoria':
+        case 'categorias':
             promesa = buscarCategoria(busqueda, regex);
             break;
 

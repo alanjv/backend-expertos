@@ -35,6 +35,35 @@ app.get('/', (req, res, next) => {
 
 });
 
+// obtener post
+app.get('/:id', (req, res) => {
+    var id = req.params.id;
+    Post.findById(id)
+        .populate('usuario', 'nombre img email')
+        .populate('categorias', 'nombreCategoria')
+        .exec((err, post) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    mensaje: 'Error al buscar post',
+                    errors: err
+                });
+            }
+            if (!post) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'El post con el id ' + id + 'no existe ',
+                    errors: {
+                        message: 'No existe un postcon ese ID '
+                    }
+                });
+            }
+            res.status(200).json({
+                ok: true,
+                post: post
+            });
+        });
+});
 
 
 
@@ -66,6 +95,8 @@ app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
         post.autor = body.autor;
         post.categoria = body.categoria;
         post.tipo = body.tipo;
+        post.comentar = body.comentar;
+
 
         post.save((err, postGuardado) => {
             if (err) {
@@ -98,7 +129,8 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
         contenido: body.contenido,
         autor: body.autor,
         categoria: body.categoria,
-        tipo: body.tipo
+        tipo: body.tipo,
+        comentar: body.comentar
 
 
     });
@@ -114,7 +146,7 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
         res.status(201).json({
             ok: true,
             post: postGuardada,
-            usuariotoken: req.usuario
+
         });
     });
 
